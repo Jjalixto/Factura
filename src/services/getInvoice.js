@@ -13,4 +13,5 @@ export const getInvoice = () => {
         .reduce((accumulator,currentValue) => accumulator + currentValue,0);
     return {...invoice, total};
 
+    
 }
