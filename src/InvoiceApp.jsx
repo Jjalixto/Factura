@@ -29,6 +29,8 @@ const invoiceInitial = {
 
 export const InvoiceApp = () => {
 
+  const [activeForm, setActiveForm] = useState(false);
+
   const [total, setTotal] = useState(0);
 
   const [counter, setCounter] = useState(4);
@@ -46,8 +48,6 @@ export const InvoiceApp = () => {
     setItems(data.items);
   }, []);
 
-
-
   useEffect(() => {
     // console.log("el counter cambio!!");
   }, [counter]);
@@ -56,7 +56,6 @@ export const InvoiceApp = () => {
     console.log("los items cambiaron!!");
     setTotal(calculateTotal(items));
   }, [items]);
-
 
   const handleInvoiceItem = ({product,price,quantity}) => {
 
@@ -68,6 +67,14 @@ export const InvoiceApp = () => {
     }]);
 
     setCounter(counter + 1);
+  }
+
+  const handlerDeleteItem = (id) => {
+      setItems(items.filter( item => item.id !== id));
+  }
+
+  const onActiveForm = () => {
+    setActiveForm(!activeForm);
   }
 
   return (
@@ -85,10 +92,12 @@ export const InvoiceApp = () => {
                 <CompanyDetails title="Datos de la empresa" company={company} />
               </div>
             </div>
-            <ListDetails title="Porductos de la factura" items={items} />
+            <ListDetails title="Porductos de la factura" items={items} handlerDeleteItem={id => handlerDeleteItem(id)}/>
             <TotalView total={total} />
-            <FormItem handler={ handleInvoiceItem } />
-          </div>
+            <button className="btn btn-secondary" 
+                    onClick={onActiveForm}>{ !activeForm? 'Abrir Form' : 'Ocultar form' }</button>
+                    { !activeForm || <FormItem handler={ handleInvoiceItem } />}
+            </div>
         </div>
       </div>
     </>
